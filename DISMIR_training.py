@@ -11,6 +11,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 # from keras import optimizers
 from tensorflow.keras.optimizers.legacy import SGD as optimizers_SGD
 import tensorflow as tf
+from tensorflow.keras.utils import plot_model
 
 
 def file_name(file_dir):
@@ -153,6 +154,11 @@ def DISMIR_deep():
     model.add(layers.Dense(1, activation='sigmoid', kernel_regularizer=None, bias_regularizer=None))
     return model
 
+
+model = DISMIR_deep()
+model.summary()
+
+plot_model(model, show_shapes=True, show_layer_names=True, show_layer_activations=True, rankdir='TB', to_file='DISMIR_deep.png')
 
 if __name__ == '__main__':
     train_dir = './train_dir/' # directory to store the results and data
