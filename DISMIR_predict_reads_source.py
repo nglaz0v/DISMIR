@@ -65,21 +65,21 @@ def conv_onehot(seq):
 def DISMIR_deep():
     model = Sequential()
     model.add(layers.Convolution1D(input_shape=(66, 5),
-                                   nb_filter=100,
-                                   filter_length=10,
-                                   border_mode="same",
+                                   filters=100,
+                                   kernel_size=10,
+                                   padding="same",
                                    activation="relu",
-                                   subsample_length=1))
-    model.add(layers.MaxPooling1D(pool_length=2, stride=2))
+                                   strides=1))
+    model.add(layers.MaxPooling1D(pool_size=2, strides=2))
     model.add(layers.Dropout(0.2))
     model.add(layers.Bidirectional(layers.LSTM(33, return_sequences=True)))
     model.add(layers.Convolution1D(input_shape=(33, 132),
-                                   nb_filter=100,
-                                   filter_length=3,
-                                   border_mode="same",
+                                   filters=100,
+                                   kernel_size=3,
+                                   padding="same",
                                    activation="relu",
-                                   subsample_length=1))
-    model.add(layers.MaxPooling1D(pool_length=2, stride=2))
+                                   strides=1))
+    model.add(layers.MaxPooling1D(pool_size=2, strides=2))
     model.add(layers.Dropout(0.2))
     model.add(layers.Flatten())
     model.add(layers.Dense(750, activation='relu', kernel_regularizer=None, bias_regularizer=None))
@@ -89,9 +89,9 @@ def DISMIR_deep():
     return model
 
 
-train_dir = '/data/jqli/HCC/12_22_test_program/train_dir/' # directory where the model is saved
-file_dir = '/data/jqli/HCC/4_1_one_hot_11/person_5_71/' # directory where the sample to test is saved, format same as training data
-store_dir = '/data/jqli/HCC/12_22_test_program/store_dir/' # directory to save predicted d-scores of reads
+train_dir = './train_dir/' # directory where the model is saved
+file_dir = './person_5_71/' # directory where the sample to test is saved, format same as training data
+store_dir = './store_dir/' # directory to save predicted d-scores of reads
 
 
 if __name__ == '__main__':

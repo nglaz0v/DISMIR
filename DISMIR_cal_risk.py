@@ -8,8 +8,8 @@ def file_name(file_dir):
 
 
 if __name__ == '__main__':
-    store_dir = '/data/jqli/HCC/12_22_test_program/store_dir/' # directory where the predicted d-scores are stored
-    output = open('/data/jqli/HCC/12_22_test_program/value_result.txt', 'w') # file to store predicted risk
+    store_dir = './store_dir/' # directory where the predicted d-scores are stored
+    output = open('./value_result_my.txt', 'w') # file to store predicted risk
     files = file_name(store_dir)
 
     # cal risk by maximize posterior probability

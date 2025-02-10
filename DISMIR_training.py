@@ -8,7 +8,8 @@ import re
 from keras.models import Sequential
 from keras import layers
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras import optimizers
+# from keras import optimizers
+from tensorflow.keras.optimizers.legacy import SGD as optimizers_SGD
 import tensorflow as tf
 
 
@@ -25,7 +26,7 @@ def data_prepare(file_dir):
     normal_region = []
     files = file_name(file_dir)
     for file in files:
-        if 'CTR' in file:  # keyword for normal plasma samples for training
+        if 'normal' in file:  # keyword for normal plasma samples for training
             input_norm = open(file_dir + file, 'r')
             for item in input_norm:
                 item = item.split()
@@ -49,7 +50,7 @@ def data_prepare(file_dir):
     files = file_name(file_dir)
     flag = 0
     for file in files:
-        if 'HOT' in file and 'T-sorted' in file: # keyword for cancer tissue samples for training
+        if 'tumor' in file: # keyword for cancer tissue samples for training
             input_tumor = open(file_dir + file, 'r')
             for item in input_tumor:
                 item = item.split()
@@ -129,21 +130,21 @@ def make_chrom_region(chrom_0, region_0):
 def DISMIR_deep():
     model = Sequential()
     model.add(layers.Convolution1D(input_shape=(66, 5),
-                                   nb_filter=100,
-                                   filter_length=10,
-                                   border_mode="same",
+                                   filters=100,
+                                   kernel_size=10,
+                                   padding="same",
                                    activation="relu",
-                                   subsample_length=1))
-    model.add(layers.MaxPooling1D(pool_length=2, stride=2))
+                                   strides=1))
+    model.add(layers.MaxPooling1D(pool_size=2, strides=2))
     model.add(layers.Dropout(0.2))
     model.add(layers.Bidirectional(layers.LSTM(33, return_sequences=True)))
     model.add(layers.Convolution1D(input_shape=(33, 132),
-                                   nb_filter=100,
-                                   filter_length=3,
-                                   border_mode="same",
+                                   filters=100,
+                                   kernel_size=3,
+                                   padding="same",
                                    activation="relu",
-                                   subsample_length=1))
-    model.add(layers.MaxPooling1D(pool_length=2, stride=2))
+                                   strides=1))
+    model.add(layers.MaxPooling1D(pool_size=2, strides=2))
     model.add(layers.Dropout(0.2))
     model.add(layers.Flatten())
     model.add(layers.Dense(750, activation='relu', kernel_regularizer=None, bias_regularizer=None))
@@ -154,8 +155,8 @@ def DISMIR_deep():
 
 
 if __name__ == '__main__':
-    train_dir = '/data/jqli/HCC/12_22_test_program/train_dir/' # directory to store the results and data
-    file_dir = '/data/jqli/HCC/4_1_one_hot_11/train_5_71/' # directory of input data
+    train_dir = './train_dir/' # directory to store the results and data
+    file_dir = './train_5_71/' # directory of input data
 
     # preprocess of input data
     # the first column : the chromosome where the read is from (e.g. chr1)
@@ -225,10 +226,10 @@ if __name__ == '__main__':
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
     model = DISMIR_deep()
-    sgd = optimizers.SGD(lr=0.05, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = optimizers_SGD(learning_rate=0.05, momentum=0.9, nesterov=True, decay=1e-6,)
     model.compile(optimizer=sgd, loss='binary_crossentropy', metrics=['accuracy'])
     early_stopping = EarlyStopping(monitor='val_loss', patience=10)
-    history = model.fit(train_data, train_label, nb_epoch=150, batch_size=128, validation_split=0.1,
+    history = model.fit(train_data, train_label, epochs=150, batch_size=128, validation_split=0.1,
                         callbacks=[EarlyStopping(patience=10), ModelCheckpoint(filepath=train_dir + 'weight.h5', save_best_only=True)],
                         shuffle=True, verbose=2)
 
