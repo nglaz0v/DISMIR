@@ -155,11 +155,6 @@ def DISMIR_deep():
     return model
 
 
-model = DISMIR_deep()
-model.summary()
-
-plot_model(model, show_shapes=True, show_layer_names=True, show_layer_activations=True, rankdir='TB', to_file='DISMIR_deep.png')
-
 if __name__ == '__main__':
     train_dir = './train_dir/' # directory to store the results and data
     file_dir = './train_5_71/' # directory of input data
@@ -232,6 +227,8 @@ if __name__ == '__main__':
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
     model = DISMIR_deep()
+    model.summary()
+    plot_model(model, show_shapes=True, show_layer_names=True, show_layer_activations=True, rankdir='TB', to_file='DISMIR_deep.png')
     sgd = optimizers_SGD(learning_rate=0.05, momentum=0.9, nesterov=True, decay=1e-6,)
     model.compile(optimizer=sgd, loss='binary_crossentropy', metrics=['accuracy'])
     early_stopping = EarlyStopping(monitor='val_loss', patience=10)
