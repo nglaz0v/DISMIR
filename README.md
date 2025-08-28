@@ -27,7 +27,22 @@ We also put the result file from *DISMIR_cal_risk.py* for reference (*value_resu
 
 For users to realize DISMIR, we also provided scripts to process *.BAM* files mapped with *BS-seeker2*. By running the script in "bam_processing" in order, you can get the *.BED* files containing switching regions and *.read* files as the input of the deep learning model. You can process your own data with these scripts and then realize DISMIR with the core codes. Here we need *samtools* to process the *.BAM* files. Python package *pyfaidx* and *pysam* are also required.
 
+## Setup
+```bash
+pip install -r requirements.txt
+ln -s train_data train_5_71
+ln -s test_data person_5_71
+mkdir train_dir
+mkdir store_dir
+```
 
+## Run
+```bash
+python DISMIR_training.py
+python DISMIR_predict_reads_source.py
+python DISMIR_cal_risk.py
+cat value_result_my.txt
+```
 
 # Citation
 If you use this code for your research, please cite our paper:

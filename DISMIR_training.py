@@ -9,7 +9,7 @@ from keras.models import Sequential
 from keras import layers
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 # from keras import optimizers
-from tensorflow.keras.optimizers.legacy import SGD as optimizers_SGD
+from tensorflow.keras.optimizers import SGD as optimizers_SGD
 import tensorflow as tf
 from tensorflow.keras.utils import plot_model
 
