@@ -1,4 +1,14 @@
-# DISMIR
+# DISMIR: *D*eep learning-based noninvasive cancer detection by *I*ntegrating DNA *S*equence and *M*ethylation information of *I*ndividual cell-free DNA *R*eads
+
+![DISMIR_overview](DISMIR_overview.jpeg)
+Overview of DISMIR:  
+(A) Identifying cancer-specific DMRs across the whole genome with the definition of switching regions and switching reads.  
+(B) Collecting all reads with three or more CpG sites from switching regions for further analysis.  
+(C) Training a deep learning model to calculate the d-score of each individual read.  
+(D) Predicting tumor fraction of a sample by maximizing the posterior probability.  
+
+---
+
 Here we present the codes of DISMIR:
 
 Files with prefix "DISMIR" are core codes
